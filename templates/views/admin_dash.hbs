@@ -1,0 +1,283 @@
+<style>
+    #task-table{
+       
+    }
+</style>
+
+{{>header}}
+{{!-- <nav class="navbar">
+  <div class="container-fluid">
+    <a class="navbar-brand" id="nav_brand" href="/user/dashboard">Task Sheet</a>
+    <div class="" id="navbarNav">
+         <a href="/user/logout">Logout</a>
+         <a class="nav-anchor" href="/admin/admin_dash">Dashboard</a>
+         <a class="nav-anchor" href="/user/register">Add Employee</a>
+         <a class="nav-anchor" href="/user/fetch_employee">Manage Employee</a>
+         <a class="nav-anchor" href="/user/logoutAll">Logout</a>
+    </div>
+</div>
+
+</nav> --}}
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" id="nav_brand" href="/user/dashboard">Task Sheet</a>
+     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+         <li  class="nav-item"><a class="nav-anchor" href="/admin/admin_dash">Dashboard</a></li>
+         <li  class="nav-item"><a class="nav-anchor" href="/user/fetch_employee">Manage Employee</a></li>
+         <li  class="nav-item"><a class="nav-anchor" href="/user/logoutAll">Logout</a></li>
+        </ul>
+    </div>
+</div>
+
+</nav>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-12 sidebar">
+            <div class="employee-list">
+                 <ul name=""  id="employee">
+                            {{#each users}}
+                            <li class="dropdown-item" value= {{this._id}}>{{this.name}}</li>
+                            {{/each}}
+                </ul> 
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="width: 100%;">
+                Employees
+                </button>
+                {{!-- <p class="dropdown-ul">Employees</p> --}}
+                <ul name="" class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="employee">
+                                {{#each users}}
+                                <li class="dropdown-item" value= {{this._id}}>{{this.name}}</li>
+                                {{/each}}
+                </ul> 
+            </div>
+            <input type="hidden" id="employee-id" value="">
+
+                
+        </div>
+
+
+        <div class="col-lg-9 col-md-8 col-sm-12 cont" id="njndsajd" style="">
+            <div class="alert alert-dark" role="alert" id="alert" style="display:none;">
+                There are no new tasks of this User!
+            </div>
+            <div class="filter" style="display: none;">
+                <p>According to</p>
+                <section><label for="">Month</label>
+                    <input type="radio"  class="time-period"  id="1">
+            <label for="">Week</label>
+                    <input type="radio"  class="time-period"  id="2">
+            <label for="">Day</label>
+                    <input type="radio"  class="time-period"  id="3"></section>
+                
+            </div>
+            <div class="container task-table" id="task-cont" style="display:none; overflow-x: scroll;">
+                <table  id="task-table">
+                    <thead>
+                        <tr class = "table-header">
+                            <th>S.no</th>
+                            <th>Date</th>
+                            <th>Project</th>
+                            <th>task</th>
+                            <th class="time-header">Start time</th>
+                            <th class="time-header">End time</th>
+                            <th>Estimated Time</th>
+                            <th>Approve</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+            
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+        $("li").on("click", function(e){
+            var li = $(this).attr('value')
+            console.log(li)
+            document.getElementById("employee-id").val = li
+            console.log(document.getElementById("employee-id").val)
+            var data = {}
+            //console.log(user)
+            data._id = li
+            url = '/fetchTask'
+            $.ajax({
+                data: data,
+                method: 'post',
+                url: url,    
+                success: function(dat){
+                    if(dat.length > 0){ 
+                   document.querySelector(".filter").style.display = "block" 
+                   document.getElementById('alert').style.display = "none"
+                   document.getElementById('task-cont').style.display = "block"
+                    var tbody = document.querySelector("#task-table tbody") 
+                    $("#task-table tbody tr").remove()
+                   
+                    for(let data of dat){
+                        var tr = document.createElement("tr")
+                        for(let d in data){
+                          var td = document.createElement("td")
+                            td.innerHTML = data[d] 
+                           
+                            if(d === '_id'){
+                                var vid = data[d]
+                            }else if(d === 'status'){
+                                var btn = document.createElement('button')
+                                //btn.setAttribute('type', 'submit')
+                                btn.innerHTML = 'Approve'
+                                $(btn).addClass("task_approve")
+                                td.innerHTML = ''
+                                $(td).addClass("task-approve-cell")
+                                td.appendChild(btn)
+                                 var id = d+'-'+vid
+                                 btn.setAttribute('id', id)
+                                tr.appendChild(td)
+                            }else{
+                                var id = d+'-'+vid
+                                td.setAttribute('id', id)
+                                tr.appendChild(td)                        
+                            }
+                            tbody.appendChild(tr)
+                        }
+                    }                    
+                    
+                }else{
+                    $("#task-table tbody tr").remove()
+                   document.getElementById('alert').style.display = "block"
+                   document.querySelector(".filter").style.display = "none"
+                   //document.querySelector(".filter").style.display = "none" 
+                   document.getElementById('task-cont').style.display = "none"
+                }
+                }
+            })
+        })
+    })
+</script>
+<script>
+    $(document).ready(function(){
+      $(".cont").on("click", "#task-cont table tbody tr td .task_approve", function(e){
+          e.preventDefault()
+          var data = {}
+          var string  = $(this).attr('id')
+          data.id = string.split("-")[1]
+          $(this).closest('tr').remove()
+          console.log()
+          $.ajax({
+              data: data,
+              url: "/task/approve",
+              method: "patch",
+              success: function(dat){
+
+              }
+          })
+      })
+    })
+</script>
+<script>
+    $(document).ready(function(){ 
+        $(".time-period").on('click', function(e){
+            e.preventDefault()
+            var data = {}
+            data._id = document.getElementById("employee-id").val
+            var id = $(this).attr('id')
+            if(id == 1){
+                data.interval = 30
+            }else if(id == 2){
+                data.interval = 7
+            }else if(id = 3){
+                data.interval = 1 
+            }
+
+            var url = "/task/fetch/time"
+            $.ajax({
+                url:url,
+                data:data,
+                method:"post",
+                success:function(dat){
+                    //console.log(dat)
+                    //console.log(dat)
+                    if(dat[0] != null){ 
+                    
+                   document.getElementById('alert').style.display = "none"
+                   document.getElementById('task-cont').style.display = "block"
+                    var tbody = document.querySelector("#task-table tbody") 
+                    $("#task-table tbody tr").remove()
+                   
+                    for(let data of dat){
+                        var tr = document.createElement("tr")
+                        for(let d in data){
+                          var td = document.createElement("td")
+                            td.innerHTML = data[d] 
+                           
+                            if(d === '_id'){
+                                var vid = data[d]
+                            }else if(d === 'status'){
+                                //var btn = document.createElement('button')
+                                //btn.setAttribute('type', 'submit')
+                                //btn.innerHTML = 'Approve'
+                                //$(btn).addClass("task_approve")
+                                //td.innerHTML = ''
+                                //$(td).addClass("task-approve-cell")
+                                td.innerHTML = "Approved"
+                                 //var id = d+'-'+vid
+                                 //btn.setAttribute('id', id)
+                                tr.appendChild(td)
+                            }else{
+                                var id = d+'-'+vid
+                                td.setAttribute('id', id)
+                                tr.appendChild(td)                        
+                            }
+                            tbody.appendChild(tr)
+                        }
+                    }                    
+                    
+                }else{
+                    $("#task-table tbody tr").remove()
+                    
+                   document.getElementById('task-cont').style.display = "none"
+                   document.getElementById('alert').style.display = "block"
+                }
+                }
+
+            })
+
+        })
+    })
+</script>
+{{!-- <script>
+    $(document).ready(function(){
+        $(".dropdown-ul").on("click",function(e){
+            console.log("skdfj")
+            document.querySelector('#employee').style.display = "block"
+        })
+
+
+    })
+</script>
+
+<script>
+    $(document).ready(function(){
+    
+
+         $(".dropdown-ul").on("dblclick", function(e){
+            console.log("skdfj")
+            document.querySelector('#employee').style.display = "none"
+        })
+
+
+    })
+</script> --}}
+
+</body>
+</html>

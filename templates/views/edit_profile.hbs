@@ -1,0 +1,72 @@
+{{>header}}
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" id="nav_brand" href="/user/dashboard">Task Sheet</a>
+     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+         <li  class="nav-item"><a class="nav-anchor" href="/user/dashboard">Dashboard</a></li>
+         <li  class="nav-item"><a class="nav-anchor" href="/user/edit_profile">Profile</a></li>
+         <li  class="nav-item"><a class="nav-anchor" href="/user/logoutAll">Logout</a></li>
+        </ul>
+    </div>
+</div>
+
+</nav>
+
+<div class="container-fluid" id="register_page">
+    <form>
+        {{!-- <label for="name">Name</label><br>
+        <input type="text" name="name" id="name" value="{{user.name}}"><br>
+
+        <label for="email">Email</label><br>
+        <input type="email" name="email" id="email" value="{{user.email}}"><br> --}}
+
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password"><br>
+
+        <label for="con-pass">Confirm Password</label><br>
+        <input type="password" id="con-pass" name="con-pass"><br>
+
+        <input type="submit" id="edit-profile-btn" class="buttons" value="Edit Password">
+    </form>
+</div>
+
+</body>
+</html>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+<script>
+
+$(document).ready(function(){
+    $("#edit-profile-btn").on('click', function(e){
+        e.preventDefault()
+        //if(document.getElementById('password').value && document.getElementById('con-pass').value){
+            if(document.getElementById('password').value === document.getElementById('con-pass').value && (document.getElementById('password').value && document.getElementById('con-pass').value)){
+                var edit_details = {}
+                edit_details.password = document.getElementById('password').value
+                var con_pass = document.getElementById('con-pass').value
+            }else{
+                document.getElementById('password').style.borderColor = 'red'
+                document.getElementById('con-pass').style.borderColor = 'red' 
+            }
+        
+        if(edit_details){
+          $.ajax({
+                data: edit_details,
+                method: "post",
+                url: '/user/edit',
+                success:function(data){
+                    console.log()
+                }
+            })
+        }
+        
+
+    })
+})
+
+</script>

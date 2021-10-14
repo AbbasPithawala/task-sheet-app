@@ -1,0 +1,32 @@
+<style>
+    body{
+        display: flex;
+    }
+    
+    form{
+        width:30%;
+        margin: auto;
+        justify-content: center;
+
+    }
+</style>
+{{>header}}
+<nav class="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="/user/dashboard">Task Sheet</a>
+    </div>
+</nav>
+<div class="container forms">
+    <form action="/user/login" method="post">
+        <div class="row">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email">
+        </div>
+        <div class="row">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password">
+        </div>
+        <input type="submit"  class="buttons" value="login">
+    </form>
+    <h5>{{msg}}</h5>
+</div>
