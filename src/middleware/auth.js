@@ -4,7 +4,7 @@ const User = require('../models/model-user')
 const auth = async (req, res, next)=>{
     try{
         const token = req.session.tokenId
-        const decode =jwt.verify(token, 'golgappe')
+        const decode =jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findOne({_id: decode._id, 'tokens.token': token})
         if(!user){
             throw new Error()
