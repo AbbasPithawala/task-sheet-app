@@ -6,7 +6,11 @@ const session = require('express-session')
 const auth = require('../middleware/auth')
 const popup = require('node-popup')
 
-
+router.get('/', (req, res)=>{
+    res.render('admin_regis', {
+        title: 'Admin Registeration'
+    })
+})
 router.get('/user/register', (req, res)=>{
     if(req.session.adminID){
         res.render('register', {
@@ -51,11 +55,32 @@ router.post('/user', async (req, res)=>{
         await user.save()
         var msg = 'User register successfull'
         console.log(msg)
-        // res.redirect('/user/register')
+        
     }catch(e){
         var msg = 'User register not successfull'
         console.log(msg)
         // res.render('/user/register')
+    }
+    
+})
+
+router.post('/admin', async (req, res)=>{
+    //console.log("dbfsdmn")
+    //console.log(req.body)
+    const user = new User(req.body)
+    console.log(user)
+    try{
+          
+        const token = await user.generateAuthToken()
+        user.user_type = 1
+        await user.save()
+        var msg = 'User register successfull'
+        console.log(msg)
+         res.redirect('/')
+    }catch(e){
+        var msg = 'User register not successfull'
+        console.log(msg)
+        res.render('/')
     }
     
 })

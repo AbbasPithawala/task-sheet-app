@@ -1,0 +1,59 @@
+{{>header}}
+<nav class="navbar">
+  <div class="container-fluid">
+    <a class="navbar-brand" id="nav_brand" href="/user/dashboard">Task Sheet</a>
+    <div class="" id="navbarNav">
+         {{!-- <a href="/user/logout">Logout</a> --}}
+         <a class="nav-anchor" href="/user">Login</a>
+         {{!-- <a class="nav-anchor" href="/user/register">Add Employee</a>
+        <a class="nav-anchor" href="/user/fetch_employee">Manage Employee</a>
+         <a class="nav-anchor" href="/user/logoutAll">Logout</a> --}}
+    </div>
+</div>
+
+</nav>
+<div class="container-fluid" id="register_page">
+    <form action="/admin" method="post">
+        <label for="name">Name</label><br>
+        <input type="text" name="name" id="name"><br>
+
+        <label for="phone">Phone Number</label><br>
+        <input type="phone" name="phone" id="phone"><br>
+
+        <label for="email">Email</label><br>
+        <input type="email" name="email" id="email" autocomplete="off"><br>
+
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password" autocomplete="off"><br>
+
+        <input type="submit" id="register" class="buttons" value="Register">
+
+    </form>
+</div>
+
+</body>
+</html>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+<script>
+
+$(document).ready(function(){
+    $("#register").on('click', function(e){
+        e.preventDefault()
+        var email = document.getElementById('email').value
+        registerDetails = {}
+        registerDetails.email = email
+        $.ajax({
+            data = registerDetails,
+            method='post',
+            url = '/admin'
+            success:function(data){
+                console.log()
+            }
+        })
+
+    })
+})
+
+</script>
