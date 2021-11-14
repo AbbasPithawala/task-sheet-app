@@ -159,7 +159,7 @@ router.get('/user/dashboard', async (req, res)=>{
 
 router.get('/admin/admin_dash', auth, async (req, res)=>{
     if(req.session.adminID){
-        var users = await User.find({user_type: 0})
+        var users = await User.find({user_type: 0, status: true})
         users = users.map((d)=>{
             let obj = {
                 _id: d._id,
