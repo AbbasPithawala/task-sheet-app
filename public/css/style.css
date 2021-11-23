@@ -87,6 +87,12 @@ li{
     margin-bottom: 10px;
     list-style-type: none;
 }
+
+
+.review-button:hover{
+    cursor: pointer;
+
+}
 li:hover{
     cursor: pointer;
     font-weight:600 ;
