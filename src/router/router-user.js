@@ -130,6 +130,12 @@ router.get('/user/dashboard', async (req, res)=>{
                 var z =  false
                 var est = false
             }
+            if(d.remark && d.remark.length > 0){
+                var remarks = true
+                var remark = d.remark
+            }else{
+                var remarks = false
+            }
             let obj = {
                 num: i,
                 date: y,
@@ -141,7 +147,9 @@ router.get('/user/dashboard', async (req, res)=>{
                 estimated_time: est,
                 start_time: x,
                 old_start_time: d.start_time,
-                approved: d.approved          
+                approved: d.approved,   
+                remarks: remarks,
+                remark: remark       
 
             }
             i += 1

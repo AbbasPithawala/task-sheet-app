@@ -46,6 +46,24 @@
                 </form>
             </div>
         </div>
+        {{!-- modal --}}
+        <div class="modal fade review-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{!-- <p id="review-text"></p> --}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
+        {{!-- modal --}}
     <div class="col-lg-9 col-md-8 col-sm-12 table-bar" style="overflow-x: scroll;">
         <div class="container align-item-center task-table">
         <table id="employee-task-table"> 
@@ -59,8 +77,8 @@
                 <th>End time</th>
                 <th>Estimated Time</th>
                 <th>Status</th>
-                <th>Approved</th>
-                {{!-- <th></th> --}}
+                <th>Review</th>
+                <th>End Task</th>
             </tr>
         </thead>
         <tbody>
@@ -74,26 +92,46 @@
                             <td>{{this.task}}</td>
                             <td class="date-field" id="start_time-{{this._id}}">{{this.start_time}}</td>
                             {{#if this.end_time}}
-                                <td class="date-field">{{this.end_time}}</td>
+                                <td class="date-field" id="end_time-{{this._id}}">{{this.end_time}}</td>
                             {{else}}
                                 <td class="date-field" id="end_time-{{this._id}}"></td>
                             {{/if}}
                             
                             {{#if this.estimated_time}}
-                                <td>{{this.estimated_time}}</td>
+                                <td  id="estimated_time-{{this._id}}" >{{this.estimated_time}}</td>
                             {{else}}
                                 <td id="estimated_time-{{this._id}}"></td>
                             {{/if}}
                             
-                            {{#if this.status}}
+                            {{!-- {{#if this.status}}
                                 <td class="date-field">Complete</td>
                             {{else}}
                                 {{!-- <td><button display="block" class="end-task buttons" id="_id-{{this._id}}">End Task</button></td> --}}
-                                <td class="date-field" id="status-{{this._id}}">Incomplete</td>
+                                {{!--<td class="date-field" id="status-{{this._id}}">Incomplete</td>
                             {{/if}}
                             {{#if this.approved}}
                             <td class="approved-task">Approved</td>
+                            {{/if}} --}}
+                            {{!--  --}}
+                            {{#if this.approved}}
+                                <td class="approved-task">Approved</td>
+                            {{else}}
+                                   {{#if this.status}}
+                                    <td class="date-field">Complete</td>
+                                    {{else}}
+                                {{!-- <td><button display="block" class="end-task buttons" id="_id-{{this._id}}">End Task</button></td> --}}
+                                    <td class="date-field" id="status-{{this._id}}">Incomplete</td>
+                                {{/if}}         
                             {{/if}}
+                            {{!--  --}}
+                            {{#if this.remarks}}
+                            <td class="review-button" id="review-{{this._id}}" >Review</td>
+                            {{!--  data-bs-toggle="modal" data-bs-target="#exampleModal" --}}
+                            <input type="hidden" id="remark-{{this._id}}" review="{{this.remark}}" >
+                            {{else}}
+                            <td>No Review</td>
+                            {{/if}}
+
                             {{#unless this.status}}
                                 <td><button display="block" class="end-task buttons" id="_id-{{this._id}}">End Task</button></td>
                             {{/unless}}
@@ -152,7 +190,23 @@
         })
     })
 </script>
-  
+  <script>
+      $(document).ready(function(){
+          $(".review-button").on("click", async function(e){
+              e.preventDefault()
+              var id = $(this).attr('id').split('-')[1]
+              var remark_id = 'remark-'+id
+              var remark = document.getElementById(remark_id).getAttribute('review')
+              var p = document.createElement('p')
+              $('.modal-body').empty()
+              p.innerHTML = remark
+              $('.modal-body').append(p)
+
+              $('#exampleModal').modal('show');
+              //console.log(remark)
+          })
+      })
+  </script>
 <script>
     //$(document).ready(function () {
       //  $('#employee-task-table').DataTable();

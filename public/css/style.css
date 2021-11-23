@@ -21,6 +21,15 @@ nav{
     padding: 5px 10px;
     font-weight: 500;
 }
+
+.task_review{
+    background-color: #ffffff;
+    color: #3a4750;
+    border: solid 2px #eeeeee;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-weight: 500; 
+}
 .status-button-1{
     background-color: #ffffff;
     color: #3a4750;
@@ -40,6 +49,12 @@ nav{
 
 
 .task_approve:hover{    
+    background-color: #3a4750;
+    color: #ffffff;
+    border: solid 2px #3a4750;
+}
+
+.task_review:hover{    
     background-color: #3a4750;
     color: #ffffff;
     border: solid 2px #3a4750;
@@ -151,7 +166,7 @@ td{
 }
 
 .date-field{
-    padding-left: 30px;
+    padding-left: 10px;
 }
 
 thead tr{

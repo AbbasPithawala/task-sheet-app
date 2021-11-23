@@ -68,7 +68,7 @@ router.post("/fetchTask", auth, async(req,res)=>{
 router.post("/task/fetch/time", auth, async(req,res)=>{
     var interval = req.body.id
     var task = await Task.find({owner: req.body._id, status: true, approved: true}).sort({date: "descending"})
-    let i = 1
+    let i = 1 
     console.log(task)
 
     task = task.map((tasks)=>{
@@ -112,7 +112,27 @@ router.patch("/task/approve", auth, async(req, res)=>{
        if(!task){
            res.redirect('/admin/admin_dash')
        }
-       const data = {approved: 1}
+       const data = {approved: true}
+       const updates = Object.keys(data)
+       updates.forEach((update)=>task[update]=data[update])
+       await task.save()
+       res.send(task)
+     
+    }catch(e){
+       res.redirect('/admin/admin_dash')
+    }
+
+})
+
+router.patch("/task/review", auth, async(req, res)=>{
+    console.log(req.body)
+    try{
+
+       const task = await Task.findOne({_id: req.body.id})
+       if(!task){
+           res.redirect('/admin/admin_dash')
+       }
+       const data = {status:false, remark: req.body.remark}
        const updates = Object.keys(data)
        updates.forEach((update)=>task[update]=data[update])
        await task.save()

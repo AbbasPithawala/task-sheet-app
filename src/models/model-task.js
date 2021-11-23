@@ -40,9 +40,9 @@ const taskSchema = mongoose.Schema({
     },
     approved:{
         type: Boolean,
-        default: false
+        default: 0
     },
-    remarks:{
+    remark:{
         type: String,
         trim: true
     },

@@ -88,6 +88,7 @@
                             <th class="time-header">End time</th>
                             <th>Estimated Time</th>
                             <th>Approve</th>
+                            <th>Review</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -98,6 +99,26 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade review-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Review</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <textarea name="review_text" id="review_text" cols="50" rows="5"></textarea>
+        <input type="hidden" id="review_task_id" value="">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="send_review">Send Review</button>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -143,6 +164,22 @@
                                  var id = d+'-'+vid
                                  btn.setAttribute('id', id)
                                 tr.appendChild(td)
+
+                                //review button
+                                var td2 = document.createElement("td")
+                                var btn2 = document.createElement('button')
+                                //btn.setAttribute('type', 'submit')
+                                btn2.innerHTML = 'Review'
+                                $(btn2).addClass("task_review")
+                                td2.innerHTML = ''
+                                $(td2).addClass("task-review-cell")
+                                td2.appendChild(btn2)
+                                 var id = 'review-'+vid
+                                 btn2.setAttribute('id', id)
+                                 btn2.setAttribute('data-bs-toggle', "modal")
+                                 btn2.setAttribute('data-bs-target', "#exampleModal")
+                                tr.appendChild(td2)
+
                             }else{
                                 var id = d+'-'+vid
                                 td.setAttribute('id', id)
@@ -252,6 +289,36 @@
 
             })
 
+        })
+    })
+</script>
+<script>
+    $(document).ready(function(){
+        $(".cont").on('click', '#task-cont table tbody tr td .task_review', function(e){
+            e.preventDefault()
+            console.log("skbfjd")
+            var string= $(this).attr('id')
+            var id = string.split("-")[1]
+            $("#review_task_id").val(id)
+
+        })
+    })
+</script>
+<script>
+    $(document).ready(function(){
+        $("#send_review").on("click", function(e){
+            var data = {}
+            data.id = $('#review_task_id').val()
+            data.remark = $('#review_text').val()
+            url = "/task/review"
+            $.ajax({
+                data: data,
+                url: url,
+                method: "patch",
+                success:function(dat){
+                    console.log(dat)
+                }
+            })
         })
     })
 </script>
